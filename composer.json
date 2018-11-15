@@ -1,0 +1,19 @@
+{
+  "name": "ctfang/coroutine",
+  "description": "test the coroutine",
+  "type": "project",
+  "authors": [
+    {
+      "name": "ctfang",
+      "email": "1992053348@qq.com"
+    }
+  ],
+  "autoload": {
+    "psr-4": {
+      "Utopia\\Co\\": "src/"
+    },
+    "files": [
+      "src/Helper/Coroutine.php"
+    ]
+  }
+}

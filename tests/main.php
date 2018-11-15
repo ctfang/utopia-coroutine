@@ -1,7 +1,14 @@
-# utopia-coroutine
-原生协程
+<?php
+/**
+ * Created by PhpStorm.
+ * User: 明月有色
+ * Date: 2018/11/15
+ * Time: 11:18
+ */
 
-~~~~php
+require '../vendor/autoload.php';
+
+
 $scheduler = new \Utopia\Co\Scheduler();
 
 go(function (){
@@ -32,5 +39,3 @@ while (1){
      * stream_select($rSocks, $wSocks, $eSocks, $timeout)
      */
 }
-~~~~
-
