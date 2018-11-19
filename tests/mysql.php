@@ -14,11 +14,11 @@ require '../vendor/autoload.php';
 $dbConfig = new \Utopia\Co\Client\Mysql\Config();
 $dbConfig->set(
     [
-        "count"    => '2',
+        "count"    => '2',// 连接池数量
         "host"     => '192.168.100.99',
         "user"     => 'root',
-        "password" => 'syyxroot',
-        "database" => 'gameserver_cyz',
+        "password" => '123456',
+        "database" => 'test',
     ]
 );
 Db::addConnect($dbConfig);
