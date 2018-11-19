@@ -90,7 +90,7 @@ class Scheduler
     /**
      * @return bool true 没有协程列表 false 还有
      */
-    public function run():bool
+    public function run(): bool
     {
         /** 协程执行 */
         if (!$this->coroutineQueue->isEmpty()) {
@@ -104,6 +104,7 @@ class Scheduler
 
             if ($return instanceof SchedulerCall) {
                 $return($task, $this);
+
                 return false;
             }
 
@@ -111,7 +112,7 @@ class Scheduler
                 $cid = $task->getCoroutineId();
                 unset($this->runningCoroutine[$cid]);
                 if (isset($this->callWaitingCoroutine[$cid])) {
-                    foreach ($this->callWaitingCoroutine[$cid] as $waitingPCid) {
+                    foreach ($this->callWaitingCoroutine[$cid] as $waitingPCid => $timeout) {
                         $this->recover($waitingPCid, $cid);
                     }
                     unset($this->callWaitingCoroutine[$cid]);
@@ -119,8 +120,10 @@ class Scheduler
             } else {
                 $this->schedule($task);
             }
+
             return false;
         }
+
         return true;
     }
 
@@ -148,14 +151,37 @@ class Scheduler
     public function recover(int $pcid, int $callCid)
     {
         if (isset($this->waitingCoroutine[$pcid])) {
-            $waitingCoroutine                            = $this->waitingCoroutine[$pcid];
-            $this->runningCoroutine[$pcid]               = $waitingCoroutine;
-            $this->callWaitingCoroutine[$callCid][$pcid] = time();
+            $waitingCoroutine              = $this->waitingCoroutine[$pcid];
+            $this->runningCoroutine[$pcid] = $waitingCoroutine;
 
             $this->schedule($waitingCoroutine);
 
             unset($this->waitingCoroutine[$pcid]);
             unset($this->callWaitingCoroutine[$callCid][$pcid]);
         }
+    }
+
+    /**
+     * 往协程发送数据
+     * @param $cid
+     * @param $value
+     * @return bool
+     */
+    public function sendValue($cid, $value)
+    {
+        if (isset($this->runningCoroutine[$cid])) {
+            $coroutine = $this->runningCoroutine[$cid];
+            $coroutine->setSendValue($value);
+
+            return true;
+        }
+        if (isset($this->waitingCoroutine[$cid])) {
+            $coroutine = $this->waitingCoroutine[$cid];
+            $coroutine->setSendValue($value);
+
+            return true;
+        }
+
+        return false;
     }
 }

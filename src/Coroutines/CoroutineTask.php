@@ -15,7 +15,7 @@ namespace Utopia\Co\Coroutines;
  */
 class CoroutineTask implements CoroutineTaskInterface
 {
-    protected $cid  = 0;
+    protected $cid = 0;
     protected $pcid = 0;
     protected $coroutine;
     protected $sendValue = null;
@@ -27,7 +27,7 @@ class CoroutineTask implements CoroutineTaskInterface
      * @param int $pcid
      * @param \Generator $coroutine
      */
-    public function __construct($cid, int $pcid,\Generator $coroutine)
+    public function __construct($cid, int $pcid, \Generator $coroutine)
     {
         $this->cid       = $cid;
         $this->pcid      = $pcid;
@@ -64,13 +64,16 @@ class CoroutineTask implements CoroutineTaskInterface
     /**
      * @return mixed
      */
-    public function run() {
+    public function run()
+    {
         if ($this->beforeFirstYield) {
             $this->beforeFirstYield = false;
+
             return $this->coroutine->current();
         } else {
-            $retval = $this->coroutine->send($this->sendValue);
+            $retval          = $this->coroutine->send($this->sendValue);
             $this->sendValue = $retval;
+
             return $retval;
         }
     }
@@ -78,7 +81,7 @@ class CoroutineTask implements CoroutineTaskInterface
     /**
      * @return bool
      */
-    public function isFinished():bool
+    public function isFinished(): bool
     {
         return !$this->coroutine->valid();
     }

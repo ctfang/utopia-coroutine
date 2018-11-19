@@ -22,7 +22,7 @@ interface CoroutineTaskInterface
      * @return int
      */
     public function getParentCoroutineId();
-
+    
     /**
      * 设置发送的值
      * @param $sendValue
